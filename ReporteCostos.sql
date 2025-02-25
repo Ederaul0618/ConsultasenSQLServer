@@ -1,4 +1,8 @@
-use CostoPorCaja
+/*Este es un fragmento de un codigo  ayuda a crear una tabla nueva con algunas especificaciones para un reporte de costos unitarios,
+utilizando funciones   de sql server como int, case when, operaciones matemÃ¡ticas , subconsultas sin generar tablas temporales nuevas.*/
+
+
+use CostoPorCaja -- use me indica que base ocupa
 
 drop table mediamentos## /*Borra datos de la tabla medicamentos##*/
 
@@ -29,7 +33,7 @@ case when CostoPorCaja.dbo.LimpiarDescripcion(a.[Descripcion Servicio]) like '%T
      when CostoPorCaja.dbo.LimpiarDescripcion(a.[Descripcion Servicio]) like '%TABLETA%' then 'Contiene Tabletas' -- dentro de esta liena se agrega la fucion para limpriardescricpion (quita espacios inicio, final y dobles espeacios)
      else 'No contiene tabletas' end 'Medicamento tabletas',
 a.FechaAtencion,
-CostoPorCaja.dbo.EliminarAcentos(b.[MÉDICO TRATANTE]) as 'Medicos',
+CostoPorCaja.dbo.EliminarAcentos(b.[MÃ‰DICO TRATANTE]) as 'Medicos',
 b.Cronicos,
 cast (''as nvarchar (255)) as 'Descripcion_Modificada' -- la funcion de cast ('' as nvarchar (255)) sirve para crear una nueva columna en nuestra nueva tabla
 
@@ -38,7 +42,7 @@ into mediamentos## -- into se ocupa para crear una nueva tabla y esta misma va c
 from TablerodeControlPowerBi..resuemndevengadoDos## a -- este from se obtiene el la coneccion a otra base de sqlserver y los .. nos da acceso a una tabla de esa base
 left join (select  -- left join es como un cruce en excel aqui lo uno con otra base y otra tabla para obtener datos y contemplar la informacion solicitada
             NUR,
-			[MÉDICO TRATANTE],
+			[MÃ‰DICO TRATANTE],
 			Cronicos
 			from para_hacer_reportes..devengado_excel##
             where
@@ -58,48 +62,48 @@ update mediamentos## set Descripcion_Modificada = case when [Medicamento tableta
 
 /*este update lo que estara actualziando sera una descripcion que nos va a remplazar la palabra TAB O TABS por tabletas ocupando funciones*/
 update mediamentos## set Descripcion_Modificada = CASE  -- case when funciona como un IF - ELSE evalua diferentes condicuones
-                                                        -- Si "TAB" está seguido de un número
-														WHEN PATINDEX('% TAB [0-9]%', [Descripcion Servicio limpia]) > 0  --devuelve la posición en la que aparece un patrón dentro de una cadena de texto.
-														THEN STUFF( ---reemplaza una parte de un texto en una posición específica
+                                                        -- Si "TAB" estÃ¡ seguido de un nÃºmero
+														WHEN PATINDEX('% TAB [0-9]%', [Descripcion Servicio limpia]) > 0  --devuelve la posiciÃ³n en la que aparece un patrÃ³n dentro de una cadena de texto.
+														THEN STUFF( ---reemplaza una parte de un texto en una posiciÃ³n especÃ­fica
 															[Descripcion Servicio limpia], 
 															PATINDEX('% TAB [0-9]%', [Descripcion Servicio limpia]) + 1, 
 															3, 'TABLETAS')
 
-                                                        -- Si "TAB" está antes de un número con un espacio
+                                                        -- Si "TAB" estÃ¡ antes de un nÃºmero con un espacio
 														WHEN PATINDEX('%[0-9] TAB%', [Descripcion Servicio limpia]) > 0 
 														THEN STUFF(
 															[Descripcion Servicio limpia], 
 															PATINDEX('%[0-9] TAB%', [Descripcion Servicio limpia]) + 2, 
 															3, 'TABLETAS')
 
-														-- Si "TAB" está antes de un número sin espacio
+														-- Si "TAB" estÃ¡ antes de un nÃºmero sin espacio
 														WHEN PATINDEX('%[0-9]TAB%', [Descripcion Servicio limpia]) > 0 
 														THEN STUFF(
 															[Descripcion Servicio limpia], 
 															PATINDEX('%[0-9]TAB%', [Descripcion Servicio limpia]) + 2, 
 															3, ' TABLETAS') --se agrega aqui el espacio al momento de reemplazar
 
-												       -- Si "TAB" está después de una letra (mayúscula)
+												       -- Si "TAB" estÃ¡ despuÃ©s de una letra (mayÃºscula)
 						                               WHEN PATINDEX('%[A-Z] TAB%', [Descripcion Servicio limpia]) > 0 
 												       THEN STUFF(
 													              [Descripcion Servicio limpia], 
 													              PATINDEX('%[A-Z] TAB%', [Descripcion Servicio limpia]) + 2, 
 													              3,'TABLETAS')
 
-														-- Si "TAB" está al inicio o al final con in signo como -/(
+														-- Si "TAB" estÃ¡ al inicio o al final con in signo como -/(
 						                               WHEN PATINDEX('%[-/(] TAB [-/)]%', [Descripcion Servicio limpia]) > 0 
 												       THEN STUFF(
 													              [Descripcion Servicio limpia], 
 													              PATINDEX('%[-/(] TAB [-/)]%', [Descripcion Servicio limpia]) + 1, 
 													              3,'TABLETAS')
 
-														-- Si "TAB" está al inicio -/(
+														-- Si "TAB" estÃ¡ al inicio -/(
 						                               WHEN PATINDEX('%[-/(]TAB%', [Descripcion Servicio limpia]) > 0 
 												       THEN STUFF(
 													              [Descripcion Servicio limpia], 
 													              PATINDEX('%[-/(]TAB%', [Descripcion Servicio limpia]) + 1, 
 													              3,' TABLETAS')
-                                                           ---Si "TAB" está rodeado de caracteres como paréntesis, guiones, espacios, etc.
+                                                           ---Si "TAB" estÃ¡ rodeado de caracteres como parÃ©ntesis, guiones, espacios, etc.
 														WHEN PATINDEX('%  TAB %', [Descripcion Servicio limpia]) > 0  
 														THEN STUFF(
 															[Descripcion Servicio limpia], 
@@ -107,14 +111,14 @@ update mediamentos## set Descripcion_Modificada = CASE  -- case when funciona co
 															3, 'TABLETAS'
 														)
         
-															---Si "TAB" está precedido o seguido por números u otros caracteres
+															---Si "TAB" estÃ¡ precedido o seguido por nÃºmeros u otros caracteres
 														WHEN PATINDEX('% .TAB. %', [Descripcion Servicio limpia]) > 0  
 														THEN STUFF(
 															[Descripcion Servicio limpia], 
 															PATINDEX('% .TAB. %', [Descripcion Servicio limpia]) + 2, 
 															3, 'TABLETAS'
 														)
-														          ---Si "TAB" está rodeado de caracteres puntos o espacios
+														          ---Si "TAB" estÃ¡ rodeado de caracteres puntos o espacios
 														WHEN PATINDEX('%. TABS. %', [Descripcion Servicio limpia]) > 0  
 														THEN STUFF(
 														[Descripcion Servicio limpia], 
@@ -122,21 +126,21 @@ update mediamentos## set Descripcion_Modificada = CASE  -- case when funciona co
 														4, 'TABLETAS'
 														)
         
-														----Si "TAB" está precedido espacios
+														----Si "TAB" estÃ¡ precedido espacios
 														WHEN PATINDEX('%  TABS%', [Descripcion Servicio limpia]) > 0  
 														THEN STUFF(
 														[Descripcion Servicio limpia], 
 														PATINDEX('%  TABS%', [Descripcion Servicio limpia]) + 2, 
 														4, 'TABLETAS'
 														)
-														----Si "TAB" está precedido o seguido por letras u numeros
+														----Si "TAB" estÃ¡ precedido o seguido por letras u numeros
 														WHEN PATINDEX('%[A-Z]TAB[0-9]%', [Descripcion Servicio limpia]) > 0  
 														THEN STUFF(
 														[Descripcion Servicio limpia], 
 														PATINDEX('%[A-Z]TAB[0-9]%', [Descripcion Servicio limpia]) + 1, 
 														3, ' TABLETAS '
 														)
-														----Si "TAB" está precedido doble o carater especial
+														----Si "TAB" estÃ¡ precedido doble o carater especial
 														WHEN PATINDEX('%  TAB', [Descripcion Servicio limpia]) > 0  
 														THEN STUFF(
 														[Descripcion Servicio limpia], 
@@ -170,7 +174,7 @@ WITH CostoMinimoMedicamentos## AS (
         [Contratante (grupossql)],
         [Proveedor Surtido],
 		Descripcion_Modificada,
-		YEAR (FechaAtencion) as 'Año',
+		YEAR (FechaAtencion) as 'AÃ±o',
 		MONTH (FechaAtencion) as 'Mes',
         MIN([Costo unitario]) AS 'CostoMinimo'
 
@@ -188,10 +192,10 @@ SELECT
         [Contratante (grupossql)],
         [Proveedor Surtido],
 		Descripcion_Modificada,
-		[Año],
+		[AÃ±o],
 	    Mes,
         CostoMinimo,
-    RANK() OVER (PARTITION BY Descripcion_Modificada ORDER BY CostoMinimo ASC) AS Ranking ---asigna un ranking basado en el costo mínimo, pero separado por cada medicamento
+    RANK() OVER (PARTITION BY Descripcion_Modificada ORDER BY CostoMinimo ASC) AS Ranking ---asigna un ranking basado en el costo mÃ­nimo, pero separado por cada medicamento
 FROM CostoMinimoMedicamentos##
 
 )
