@@ -1,4 +1,9 @@
 Consultas SQL
-Aquí se muestra una serie de consultas en lenguaje estructurado, realizadas principalmente a partir de los datos públicos de la plataforma SQLSERVER. Están principalmente orientadas a mostrar las utilidades básicas de las consultas SQL y su rendimiento en la resolución de problemas logísticos.
+Este repositorio contiene una serie de consultas escritas en lenguaje SQL, elaboradas principalmente a partir de datos públicos disponibles en SQL Server. El objetivo es ilustrar el uso de consultas estructuradas para resolver problemas logísticos, así como evaluar su rendimiento y aplicabilidad en distintos escenarios.
 
-Los archivos están organizados por carpetas con nombres acordes a los que se realiza en la(s) consulta(s), cada archivo tiene un nombre descriptivo en minúsculas, sin espacios y precedido por un “bd” si se trata de un archivo para crear la base de datos o una “q” en caso de ser una consulta.
+La estructura del repositorio se organiza en carpetas temáticas, cuyos nombres describen el tipo de análisis o proceso abordado. Cada archivo sigue una convención de nomenclatura clara:
+
+Los archivos destinados a la creación de bases de datos comienzan con el prefijo bd.
+
+Las consultas están identificadas con el prefijo q.
+Todos los nombres están en minúsculas, sin espacios, para facilitar su lectura y mantenimiento.
