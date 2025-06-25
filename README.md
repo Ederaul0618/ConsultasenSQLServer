@@ -1,9 +1,22 @@
-Consultas SQL
-Este repositorio contiene una serie de consultas escritas en lenguaje SQL, elaboradas principalmente a partir de datos públicos disponibles en SQL Server. El objetivo es ilustrar el uso de consultas estructuradas para resolver problemas logísticos, así como evaluar su rendimiento y aplicabilidad en distintos escenarios.
+ConsultasSQL
+Nombre del proyecto: Repositorio de Consultas SQL para resolución de casos logísticos
 
-La estructura del repositorio se organiza en carpetas temáticas, cuyos nombres describen el tipo de análisis o proceso abordado. Cada archivo sigue una convención de nomenclatura clara:
+Este proyecto contiene una colección de scripts SQL desarrollados para ilustrar consultas estructuradas aplicadas sobre bases de datos en SQL Server. Su enfoque principal es demostrar cómo las consultas SQL pueden utilizarse eficazmente en contextos logísticos y operativos, evaluando tanto su estructura como su rendimiento.
 
-Los archivos destinados a la creación de bases de datos comienzan con el prefijo bd.
+Características principales
+Consultas SQL organizadas por temática y aplicación.
 
-Las consultas están identificadas con el prefijo q.
-Todos los nombres están en minúsculas, sin espacios, para facilitar su lectura y mantenimiento.
+Nombres de archivos estandarizados: minúsculas, sin espacios, con prefijos según su función.
+
+Datos basados en esquemas simulados o públicos para fines demostrativos.
+
+Tecnologías utilizadas
+SQL Server
+
+T-SQL
+
+Microsoft Management Studio (recomendado)
+
+Archivos .sql compatibles con múltiples entornos de bases de datos
+
+
