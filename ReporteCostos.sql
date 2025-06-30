@@ -46,10 +46,10 @@ left join (select  -- left join es como un cruce en excel aqui lo uno con otra b
 			Cronicos
 			from para_hacer_reportes..devengado_excel##
             where
-			YEAR ([Fecha Atencion]) in ('2024','2025')
+			YEAR ([Fecha Atencion]) between '2024-01-01' and '2025-06-30'
 			and Contratante in ('sustituir este texto por el contenido de la columna')) as b on a.NUR = b.NUR
 where -- sirve para hacer las esepciones que necesita esta nueva tabla 
-YEAR (a.fechaAtencion) in ('2024','2025')
+YEAR (a.fechaAtencion) between '2024-01-01' and '2025-06-30'
 and a.EstastusServiciosOpe in ('Medicamentos')
 and a.Contratante in ('sustituir este texto por el contenido de la columna') 
 
